@@ -19,6 +19,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.PermissionChecker
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.Constantes.ATIVA_BLUETOOTH
@@ -28,7 +29,9 @@ import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.Constantes.MENSAGEM_TEXTO
 import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.Constantes.REQUER_PERMISSOES_LOCALIZACAO
 import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.Constantes.TEMPO_DESCOBERTA_SERVICO_BLUETOOTH
 import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.adaptadorBt
+import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.outputStream
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.IOException
 
 class  MainActivity : AppCompatActivity() {
     // Referências para as threads filhas
@@ -249,6 +252,27 @@ class  MainActivity : AppCompatActivity() {
         aguardeDialog?.dismiss()
         threadComunicacao = ThreadComunicacao(this)
         threadComunicacao?.iniciar(socket)
+    }
+
+    fun enviarMensagem(view: View){
+        if (view == enviarBt){
+            val mensagem = mensagemEditText.text.toString()
+            mensagemEditText.setText("")
+
+            try {
+                if(outputStream != null){
+                    outputStream?.writeUTF(mensagem)
+
+                    historicoAdapter?.add("EU: ${mensagem}")
+                    historicoAdapter?.notifyDataSetChanged()
+                }
+            }
+            catch (e: IOException){
+                mHandler?.obtainMessage(MENSAGEM_DESCONEXAO, e.message + "[0]")?.sendToTarget()
+
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun toast(mensagem: String) = Toast.makeText(this,mensagem,Toast.LENGTH_SHORT).show()
