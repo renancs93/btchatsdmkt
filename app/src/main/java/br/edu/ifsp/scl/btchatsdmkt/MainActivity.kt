@@ -11,16 +11,18 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.PermissionChecker
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.Toast
 import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.Constantes.ATIVA_BLUETOOTH
 import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.Constantes.ATIVA_DESCOBERTA_BLUETOOTH
@@ -34,6 +36,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 
 class  MainActivity : AppCompatActivity() {
+
     // Referências para as threads filhas
     private var threadServidor: ThreadServidor? = null
     private var threadCliente: ThreadCliente? = null
@@ -72,6 +75,68 @@ class  MainActivity : AppCompatActivity() {
                    ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION),REQUER_PERMISSOES_LOCALIZACAO)
                }
         }
+
+        //Abrir modo de seleção de Modo
+        abrirSelecaoModoChat()
+    }
+
+    fun  abrirSelecaoModoChat(){
+
+        val dialog = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_modo, null)
+
+//        val btnOk = dialogView.findViewById<Button>(R.id.btn_ok_modo)
+        val rgModo = dialogView.findViewById<RadioGroup>(R.id.rg_modo)
+        val rbCliente = dialogView.findViewById<RadioButton>(R.id.rb_modoCliente)
+        val rbServidor = dialogView.findViewById<RadioButton>(R.id.rb_modoServidor)
+
+        dialog.setView(dialogView)
+        dialog.setCancelable(false)
+        dialog.setPositiveButton("Selecionar", { dialogInterface: DialogInterface, i: Int -> })
+
+        val customDialog = dialog.create()
+        customDialog.show() //este metodo deve ser chamado antes de querer dar um get nos elementos da View
+
+        customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener({
+            var id: Int = rgModo.checkedRadioButtonId
+
+            if (id != -1){
+                //Toast.makeText(baseContext, "Selecionado: ${id}", Toast.LENGTH_SHORT).show()
+                if (id == rbCliente.id){
+                    modoCliente()
+                }
+                else if (id == rbServidor.id){
+                    modoServidor()
+                }
+                customDialog.dismiss()
+            }
+            else{
+                Toast.makeText(baseContext, "Selecione um Modo!", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
+    }
+
+    private fun modoCliente(){
+        toast("Configurando modo cliente")
+
+        // (Re)Inicializando a Lista de dispositivos encontrados
+        listaBtsEncontrados = mutableListOf()
+
+        registraReceiver()
+
+        adaptadorBt?.startDiscovery()
+
+        exibirAguardeDialog("Procurando dispositivos Bluetooth", 0)
+    }
+
+    private fun modoServidor(){
+        toast("Configurando modo servidor")
+
+        val descobertaIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+        descobertaIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,TEMPO_DESCOBERTA_SERVICO_BLUETOOTH)
+        startActivityForResult(descobertaIntent,ATIVA_DESCOBERTA_BLUETOOTH)
     }
 
     private fun pegandoAdaptadorBt() {
@@ -127,29 +192,35 @@ class  MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         var retorno = false
+
         when (item?.itemId) {
-            R.id.modoClienteMenuItem -> {
-                toast("Configurando modo cliente")
-
-                // (Re)Inicializando a Lista de dispositivos encontrados
-                listaBtsEncontrados = mutableListOf()
-
-                registraReceiver()
-
-                adaptadorBt?.startDiscovery()
-
-                exibirAguardeDialog("Procurando dispositivos Bluetooth", 0)
+            R.id.menuModo -> {
+                abrirSelecaoModoChat()
                 retorno = true
             }
-            R.id.modoServidorMenuItem -> {
-                toast("Configurando modo servidor")
-
-                val descobertaIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
-                descobertaIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,TEMPO_DESCOBERTA_SERVICO_BLUETOOTH)
-                startActivityForResult(descobertaIntent,ATIVA_DESCOBERTA_BLUETOOTH)
-                retorno = true
-            }
+//            R.id.modoClienteMenuItem -> {
+//                toast("Configurando modo cliente")
+//
+//                // (Re)Inicializando a Lista de dispositivos encontrados
+//                listaBtsEncontrados = mutableListOf()
+//
+//                registraReceiver()
+//
+//                adaptadorBt?.startDiscovery()
+//
+//                exibirAguardeDialog("Procurando dispositivos Bluetooth", 0)
+//                retorno = true
+//            }
+//            R.id.modoServidorMenuItem -> {
+//                toast("Configurando modo servidor")
+//
+//                val descobertaIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+//                descobertaIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,TEMPO_DESCOBERTA_SERVICO_BLUETOOTH)
+//                startActivityForResult(descobertaIntent,ATIVA_DESCOBERTA_BLUETOOTH)
+//                retorno = true
+//            }
         }
+
         return retorno
     }
 
@@ -274,6 +345,7 @@ class  MainActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun toast(mensagem: String) = Toast.makeText(this,mensagem,Toast.LENGTH_SHORT).show()
 

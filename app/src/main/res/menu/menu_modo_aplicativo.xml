@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!--Modo servidor -->
+
+    <!--<group-->
+            <!--android:id="@+id/modoChat"-->
+            <!--android:checkableBehavior="single"-->
+            <!--android:enabled="true"-->
+            <!--&gt;-->
+        <!--&lt;!&ndash;Modo servidor &ndash;&gt;-->
+        <!--<item-->
+                <!--android:id="@+id/modoServidorMenuItem"-->
+                <!--android:title="Modo servidor"-->
+                <!--app:showAsAction="never"-->
+        <!--/>-->
+        <!--&lt;!&ndash;Modo cliente &ndash;&gt;-->
+        <!--<item-->
+                <!--android:id="@+id/modoClienteMenuItem"-->
+                <!--android:title="Modo cliente"-->
+                <!--app:showAsAction="never"-->
+        <!--/>-->
+    <!--</group>-->
+
+    <!--Refresh -->
     <item
-            android:id="@+id/modoServidorMenuItem"
-            android:title="Modo servidor"
-            app:showAsAction="never"/>
-    <!--Modo cliente -->
-    <item
-            android:id="@+id/modoClienteMenuItem"
-            android:title="Modo cliente"
-            app:showAsAction="never"/>
+        android:id="@+id/menuModo"
+        android:title="Modo"
+        app:showAsAction="always"
+        android:visible="true"
+
+    />
+
 </menu>
