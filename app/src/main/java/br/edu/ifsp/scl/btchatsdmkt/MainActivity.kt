@@ -336,6 +336,8 @@ class  MainActivity : AppCompatActivity() {
 
                     historicoAdapter?.add("EU: ${mensagem}")
                     historicoAdapter?.notifyDataSetChanged()
+                    //rolagem automatica
+                    historicoListView.smoothScrollByOffset(historicoAdapter?.count!! -1)
                 }
             }
             catch (e: IOException){

@@ -7,7 +7,9 @@
             android:layout_above="@id/novaMensagemLinearLayout"
             android:id="@+id/historicoListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:transcriptMode="alwaysScroll"
+    />
     <!-- Alinhado na parte de baixo da tela -->
     <LinearLayout
             android:id="@+id/novaMensagemLinearLayout"
