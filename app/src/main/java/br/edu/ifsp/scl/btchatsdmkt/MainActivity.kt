@@ -14,16 +14,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import androidx.core.app.ActivityCompat
-import androidx.core.content.PermissionChecker
-import androidx.appcompat.app.AppCompatActivity
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.PermissionChecker
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Toast
+import android.widget.*
 import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.Constantes.ATIVA_BLUETOOTH
 import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.Constantes.ATIVA_DESCOBERTA_BLUETOOTH
 import br.edu.ifsp.scl.btchatsdmkt.BluetoothSingleton.Constantes.MENSAGEM_DESCONEXAO
@@ -64,7 +61,7 @@ class  MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         historicoAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1)
-        historicoListView.adapter = historicoAdapter
+        historicoListView.adapter = this!!.historicoAdapter
 
         mHandler = TelaPrincipalHandler()
 
@@ -123,15 +120,19 @@ class  MainActivity : AppCompatActivity() {
         var dialog = AlertDialog.Builder(this)
         var dialogView = layoutInflater.inflate(R.layout.dialog_name, null)
 
+        var txtNome =  dialogView.findViewById<EditText>(R.id.tied_nome_user)
+        txtNome.setText(nomeExibicao)
+
         dialog.setView(dialogView)
-        dialog.show()
 
         dialog.setPositiveButton("Salvar", { dialogInterface: DialogInterface?, which: Int ->
-
+            nomeExibicao = txtNome.text.toString()
+            Toast.makeText (baseContext, "Nome/Apelido alterado para: ${nomeExibicao}", Toast.LENGTH_LONG).show()
         })
         dialog.setNegativeButton("Cancelar", { dialogInterface: DialogInterface?, which: Int ->
 
         })
+        dialog.show()
 
     }
 
