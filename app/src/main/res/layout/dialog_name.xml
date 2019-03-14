@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+												   android:layout_width="match_parent"
+												   android:layout_height="match_parent">
+
+
+	<LinearLayout android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:orientation="vertical"
+	>
+
+		<TextView android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:id="@+id/tv_name"
+				  android:text="Nome de Exibição"
+				  android:textSize="18dp"
+				  android:textAlignment="center"
+		/>
+
+		<com.google.android.material.textfield.TextInputLayout
+				android:id="@+id/til_nome_user"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+			<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/tied_nome_user"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="Nome/Apelido"
+					android:textSize="15sp"
+			/>
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+	</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

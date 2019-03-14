@@ -27,7 +27,12 @@
         android:title="Modo"
         app:showAsAction="always"
         android:visible="true"
-
+    />
+    <item
+            android:id="@+id/menuNomeExibe"
+            android:title="Nome de exibição"
+            app:showAsAction="collapseActionView"
+            android:visible="true"
     />
 
 </menu>

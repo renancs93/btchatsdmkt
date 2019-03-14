@@ -14,9 +14,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.PermissionChecker
-import android.support.v7.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.PermissionChecker
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -56,6 +56,8 @@ class  MainActivity : AppCompatActivity() {
 
     // Dialog para aguardar conexões e busca
     private var aguardeDialog: ProgressDialog? = null
+
+    var nomeExibicao = "(EU)"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,7 +116,22 @@ class  MainActivity : AppCompatActivity() {
                 Toast.makeText(baseContext, "Selecione um Modo!", Toast.LENGTH_SHORT).show()
             }
         })
+    }
 
+    private fun abrirNomeExibicao(){
+
+        var dialog = AlertDialog.Builder(this)
+        var dialogView = layoutInflater.inflate(R.layout.dialog_name, null)
+
+        dialog.setView(dialogView)
+        dialog.show()
+
+        dialog.setPositiveButton("Salvar", { dialogInterface: DialogInterface?, which: Int ->
+
+        })
+        dialog.setNegativeButton("Cancelar", { dialogInterface: DialogInterface?, which: Int ->
+
+        })
 
     }
 
@@ -196,6 +213,10 @@ class  MainActivity : AppCompatActivity() {
         when (item?.itemId) {
             R.id.menuModo -> {
                 abrirSelecaoModoChat()
+                retorno = true
+            }
+            R.id.menuNomeExibe -> {
+                abrirNomeExibicao()
                 retorno = true
             }
 //            R.id.modoClienteMenuItem -> {
@@ -334,7 +355,7 @@ class  MainActivity : AppCompatActivity() {
                 if(outputStream != null){
                     outputStream?.writeUTF(mensagem)
 
-                    historicoAdapter?.add("EU: ${mensagem}")
+                    historicoAdapter?.add("${nomeExibicao}: ${mensagem}")
                     historicoAdapter?.notifyDataSetChanged()
                     //rolagem automatica
                     historicoListView.smoothScrollByOffset(historicoAdapter?.count!! -1)
