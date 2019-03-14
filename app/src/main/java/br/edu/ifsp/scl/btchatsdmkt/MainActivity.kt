@@ -354,7 +354,9 @@ class  MainActivity : AppCompatActivity() {
 
             try {
                 if(outputStream != null){
-                    outputStream?.writeUTF(mensagem)
+                    //outputStream?.writeUTF(mensagem)
+                    //Envia o nome que o usuário definiu juntamente com a mensagem
+                    outputStream?.writeUTF("${nomeExibicao}: " + mensagem)
 
                     historicoAdapter?.add("${nomeExibicao}: ${mensagem}")
                     historicoAdapter?.notifyDataSetChanged()

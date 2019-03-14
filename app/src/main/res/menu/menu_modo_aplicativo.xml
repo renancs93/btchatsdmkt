@@ -24,8 +24,8 @@
     <!--Refresh -->
     <item
         android:id="@+id/menuModo"
-        android:title="Modo"
-        app:showAsAction="always"
+        android:title="Modo Chat"
+        app:showAsAction="collapseActionView"
         android:visible="true"
     />
     <item
